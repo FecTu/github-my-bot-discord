@@ -1,5 +1,4 @@
 -iscord.py
-aiohttp
 appdirs
 async-timeout
 asyncio
