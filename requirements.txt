@@ -9,7 +9,6 @@ chardet
 Cybernator
 decorator
 discord
-discord.py
 distlib
 embed
 filelock
