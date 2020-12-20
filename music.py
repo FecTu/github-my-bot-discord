@@ -3,7 +3,8 @@ from discord.ext import commands
 from googleapiclient.discovery import build
 from discord.ext.commands import command
 
-# import pymongo
+import pymongo
+import dnspython
 #NOTE: Import pymongo if you are using the database function commands 
 #NOTE: Also add `pymongo` and `dnspython` inside the requirements.txt file if you are using pymongo
 
