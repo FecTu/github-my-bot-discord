@@ -233,9 +233,9 @@ async def EmojiRole(ctx):
 #Private rooms
 @client.event
 async def on_voice_state_update( member, before, after,):
-        if before.channel is None and after.channel.id == 788710906380025877:
+        if before.channel is None and after.channel.id == 790829193192669214:
             for guild in client.guilds:
-                maincategory = discord.utils.get( guild.categories, id = 788717733008244757 )
+                maincategory = discord.utils.get( guild.categories, id = 790829151770509332 )
                 channel2 = await guild.create_voice_channel( name=f"Канал {member.display_name}", category = maincategory )
                 await channel2.set_permissions(member, connect = True, mute_members = True, move_members = True, manage_channels = True)
                 await channel2.edit(user_limit = 2)
@@ -383,7 +383,5 @@ async def clear_error( ctx, error ):
 
 # Get token
 #token = open( "token.txt", "r").readline()
-
-#token = os.environ.get("BOT_TOKEN")
 
 client.run(os.getenv('BOT_TOKEN'))
