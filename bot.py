@@ -28,10 +28,10 @@ bad_words = [ "нахуй", "бунт", "лох", "пидр", "долбаеб", 
 client = commands.Bot( command_prefix = PREFIX )
 client.remove_command( "help" )
 
-exts=['music']
-
 @client.event
 async def on_ready():
+    song_name='TWICE - What is love?'
+    activity_type=discord.ActivityType.listening
     print("""
                ░██████╗████████╗░█████╗░██████╗░████████╗  ░██████╗██╗░░██╗██╗███████╗██╗░░░██╗██╗░░██╗██╗
                ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝  ██╔════╝██║░░██║██║╚════██║██║░░░██║██║░██╔╝██║
@@ -55,13 +55,13 @@ async def on_ready():
 #Rank
 @client.event
 async def on_message(message):
-    with open("E:\\botdiscord\\Ember\\Ember\\lvl.json", "r") as f:
-            users = json.load(f)
+    with open("lvl.json", "r") as f:
+        users = json.load(f)
     await update_data(users,message.author)
     await add_exp(users,message.author),0.1
     await add_lvl(users,message.author)
-    with open("E:\\botdiscord\\Ember\\Ember\\lvl.json", "w") as f:
-            json.dump(users,f)
+    with open("lvl.json", "w") as f:
+        json.dump(users,f)
     async def update_data(users,user):
         if not user in users:
             users[user] = {}
@@ -221,8 +221,84 @@ async def nsfw(ctx):
 	emb.set_image( url = "https://danbooru.donmai.us/data/e71dc6de8c5c153e56ee179e5dc5d58f.gif")
 	await ctx.send(embed = emb)
 
-#EmojiRole
+#Music
+@client.command(pass_context=True, aliases=['j', 'joi'])
+async def join(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
 
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+
+    await voice.disconnect()
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+        print(f"Bot подключился к голосовому каналу {channel}\n")
+        await ctx.send(f"Присоединился {channel}")
+
+@client.command(pass_context=True, aliases=['l', 'lea'])
+async def leave(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.disconnect()
+        print(f"Бот покинул {channel}")
+        await ctx.send(f"Покинул {channel}")
+    else:
+        print("Bot покинул голосовой канал, ему так ")
+        await ctx.send("Покинул голосовой канал")
+
+@client.command(pass_context=True, aliases=['p', 'pla'])
+async def play(ctx, url: str):
+
+    song_there = os.path.isfile("song.mp3")
+    try:
+        if song_there:
+            os.remove("song.mp3")
+            print("Removed old song file")
+    except PermissionError:
+        print("Trying to delete song file, but it's being played")
+        await ctx.send("ERROR: Music playing")
+        return
+
+    await ctx.send("Getting everything ready now")
+
+    voice = get(bot.voice_clients, guild=ctx.guild)
+
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        print("Downloading audio now\n")
+        ydl.download([url])
+
+    for file in os.listdir("./"):
+        if file.endswith(".mp3"):
+            name = file
+            print(f"Renamed File: {file}\n")
+            os.rename(file, "song.mp3")
+
+    voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: print("Song done!"))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.07
+
+    nname = name.rsplit("-", 2)
+    await ctx.send(f"Проигрывается: {nname[0]}")
+    print("playing\n")
+
+#EmojiRole
 @client.event
 async def EmojiRole(ctx):
 	emb = discord.Embed( title= "Ваш пол", color=0x1100ff)
@@ -253,7 +329,7 @@ async def on_member_join( member):
 
     await update_data(users,member)
 
-    with open("E:\\botdiscord\\Ember\\Ember\\lvl.json", "w") as f:
+    with open("E:\\Play Alexsey\\Программирование\\Microsoft Visual Studio\\2019\\Professional\\Ember\\lvl.json", "w") as f:
         json.dump(users, f)
 
         channel = client.get_channel( 788051331927507025 )
