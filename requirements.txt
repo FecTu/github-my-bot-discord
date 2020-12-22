@@ -23,6 +23,7 @@ nekos.py
 nhentai
 pip
 pycparser
+pymongo
 PyNaCl
 pyowm
 PySocks
