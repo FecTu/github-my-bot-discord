@@ -454,8 +454,8 @@ async def clear_error( ctx, error ):
         await message.author.send( f"{ message.author.mention }, у вас не достаточно прав!" )
 
 # Get token
-token = open( "token.txt", "r").readline()
+#token = open( "token.txt", "r").readline()
 
 #token = os.environ.get("BOT_TOKEN")
 
-client.run( token )
+client.run(os.getenv('BOT_TOKEN'))
