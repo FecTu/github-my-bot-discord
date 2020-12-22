@@ -52,25 +52,11 @@ async def on_ready():
         """)
     await client.change_presence( status= discord.Status.online, activity= Activity( name= "за Team Inlors", type=ActivityType.watching))
 
-@client.event
-async def on_member_join(member):
-    channel = client.get_channel(789548465390354432)
-    for guild in client.guild:
-        role = discord.utils.get(guild.roles, id= 789036534988275712)
-    await member.add_roles(role)
-    await channel.send(f"{member.mention} Добро пожаловать на сервер!")
-
-@client.event
-async def on_member_remove(member):
-    channel = client.get_channel(789548465390354432)
-    await channel.send(f"{member} Покинул нас!")
-
 #Rank
 @client.event
 async def on_message(message):
     with open("lvl.json", "r") as f:
         users = json.load(f)
-
     async def update_data(users,user):
         if not user in users:
             users[user] = {}
@@ -85,7 +71,6 @@ async def on_message(message):
             await message.channel.send(f"{message.author.mention} повысил свой уровень")
             lvl = lvl + 1
             exp = 0
-    
     await update_data(users,message.author)
     await add_exp(users,message.author, 5)
     await add_lvl(users, message.author, message.channel)
@@ -448,6 +433,19 @@ async def Rythm( ctx ):
     emb.add_field( name = "?skip".format( PREFIX ), value="пропустить музыку", inline=True )
     emb.set_thumbnail( url = "https://tbib.org/images/7431/e9764a47ea99c9b457fdb856061a2155648c76d8.jpg?8183652" )
     await ctx.send( embed=emb )
+
+@client.event
+async def on_member_join(member):
+    channel = client.get_channel(789548465390354432)
+    for guild in client.guild:
+        role = discord.utils.get(guild.roles, id= 789036534988275712)
+    await member.add_roles(role)
+    await channel.send(f"{member.mention} Добро пожаловать на сервер!")
+
+@client.event
+async def on_member_remove(member):
+    channel = client.get_channel(789548465390354432)
+    await channel.send(f"{member} Покинул нас!")
 
 @clear.error
 async def clear_error( ctx, error ):
