@@ -253,7 +253,7 @@ async def on_member_join( member):
 
     await update_data(users,member)
 
-    with open("E:\\Play Alexsey\\Программирование\\Microsoft Visual Studio\\2019\\Professional\\Ember\\lvl.json", "w") as f:
+    with open("E:\\botdiscord\\Ember\\Ember\\lvl.json", "w") as f:
         json.dump(users, f)
 
         channel = client.get_channel( 788051331927507025 )
