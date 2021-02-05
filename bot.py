@@ -12,11 +12,12 @@ import speech_recognition as sr
 from discord.utils import get
 import youtube_dl
 import shutil
-import traceback
+import traceback2 as traceback
 import sqlite3
 import validators
 import nekos
 import json
+import sys
 
 import os
 from time import sleep
@@ -25,10 +26,20 @@ import requests
 PREFIX = "."
 bad_words = [ "нахуй", "бунт", "лох", "пидр", "долбаеб", "пидар", "пидарас", "пидор", "пидорас" ]
 
-client = commands.Bot( command_prefix = PREFIX )
-client.remove_command( "help" )
+bot = commands.Bot( command_prefix = PREFIX )
+bot.remove_command( "help" )
 
-@client.event
+initial_extensions = ["cogs.voice"]
+
+if __name__ == '__main__':
+    for extension in initial_extensions:
+        try:
+            bot.load_extension(extension)
+        except Exception as e:
+            print(f'Не удалось загрузить расширение {extension}.')
+            traceback.print_exc()
+
+@bot.event
 async def on_ready():
     song_name='TWICE - What is love?'
     activity_type=discord.ActivityType.listening
@@ -50,10 +61,10 @@ async def on_ready():
             ░░░╚═╝░░░╚═╝░░╚══════╝╚══════╝░╚════╝░░╚════╝░╚═╝░░░░░╚═╝╚══════╝  ╚═════╝░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝
 
         """)
-    await client.change_presence( status= discord.Status.online, activity= Activity( name= "за Team Inlors", type=ActivityType.watching))
+    await bot.change_presence( status= discord.Status.online, activity= Activity( name= "за Team Inlors", type=ActivityType.watching))
 
 #Rank
-@client.event
+@bot.event
 async def on_message(message):
     with open("lvl.json", "r") as f:
         users = json.load(f)
@@ -77,7 +88,7 @@ async def on_message(message):
             users[user]["exp"] = 0
             users[user]["lvl"] = lvl + 1
 
-@client.command( pass_context=True )
+@bot.command( pass_context=True )
 async def rank(ctx, user : discord.Member=None):
     if user is None:
         user = message.author.id
@@ -98,71 +109,71 @@ def is_nsfw():
         return ctx.channel.is_nsfw()
     return commands.check(predicate)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def neko(ctx):
-	emb = discord.Embed( title ="Neko", color = 0x1100ff )
-	emb.set_image(url=nekos.img("nsfw_neko_gif"))
-	emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
-	await ctx.send(embed = emb)
+    emb = discord.Embed( title ="Neko", color = 0x1100ff )
+    emb.set_image(url=nekos.img("nsfw_neko_gif"))
+    emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
+    await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def yuri(ctx):
-	emb = discord.Embed( title = "Yuri", color = 0x1100ff )
-	emb.set_image(url=nekos.img("les"))
-	emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
-	await ctx.send(embed = emb)
+    emb = discord.Embed( title = "Yuri", color = 0x1100ff )
+    emb.set_image(url=nekos.img("les"))
+    emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
+    await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def hentai(ctx):
-	emb = discord.Embed( title = "Hentai", color = 0x1100ff )
-	emb.set_image(url=nekos.img("Random_hentai_gif"))
-	emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
-	await ctx.send(embed = emb)
+    emb = discord.Embed( title = "Hentai", color = 0x1100ff )
+    emb.set_image(url=nekos.img("Random_hentai_gif"))
+    emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
+    await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def cum(ctx):
-	emb = discord.Embed( title = "Cum", color = 0x1100ff )
-	emb.set_image(url=nekos.img("cum"))
-	emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
-	await ctx.send(embed = emb)
+    emb = discord.Embed( title = "Cum", color = 0x1100ff )
+    emb.set_image(url=nekos.img("cum"))
+    emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
+    await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def pussy(ctx):
-	emb = discord.Embed( title = "Pussy", color = 0x1100ff )
-	emb.set_image(url=nekos.img("pwankg"))
-	emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
-	await ctx.send(embed = emb)
+    emb = discord.Embed( title = "Pussy", color = 0x1100ff )
+    emb.set_image(url=nekos.img("pwankg"))
+    emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
+    await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def feet(ctx):
-	emb = discord.Embed( title = "Feet", color = 0x1100ff )
-	emb.set_image(url=nekos.img("feetg"))
-	emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
-	await ctx.send(embed = emb)
+    emb = discord.Embed( title = "Feet", color = 0x1100ff )
+    emb.set_image(url=nekos.img("feetg"))
+    emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
+    await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def cuddle(ctx):
-	emb = discord.Embed( title = "Cuddle", color = 0x1100ff )
-	emb.set_image(url=nekos.img("cuddle"))
-	emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
-	await ctx.send(embed = emb)
+    emb = discord.Embed( title = "Cuddle", color = 0x1100ff )
+    emb.set_image(url=nekos.img("cuddle"))
+    emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
+    await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def solo(ctx):
-	emb = discord.Embed( title = "Solo", color = 0x1100ff )
-	emb.set_image(url=nekos.img("solog"))
-	emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
-	await ctx.send(embed = emb)
+    emb = discord.Embed( title = "Solo", color = 0x1100ff )
+    emb.set_image(url=nekos.img("solog"))
+    emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
+    await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def kemo(ctx):
     emb = discord.Embed( title = "Kemo", color = 0x1100ff )
@@ -170,7 +181,7 @@ async def kemo(ctx):
     emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
     await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def kuni(ctx):
     emb = discord.Embed( title = "Kuni", color = 0x1100ff )
@@ -178,7 +189,7 @@ async def kuni(ctx):
     emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
     await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def loli(ctx):
     emb = discord.Embed( title = "Loli", color = 0x1100ff )
@@ -186,7 +197,7 @@ async def loli(ctx):
     emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
     await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def blowjob(ctx):
     emb = discord.Embed( title = "Blowjob", color = 0x1100ff )
@@ -194,7 +205,7 @@ async def blowjob(ctx):
     emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
     await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def anal(ctx):
     emb = discord.Embed( title = "Anal", color = 0x1100ff )
@@ -202,30 +213,30 @@ async def anal(ctx):
     emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
     await ctx.send(embed = emb)
 
-@client.command()
+@bot.command()
 @is_nsfw()
 async def nsfw(ctx):
-	emb = discord.Embed( title= "Команды NSFW", color = 0x1100ff )
-	emb.add_field( name= "{}neko".format( PREFIX ), value= "Кошки-девочки", inline= True)
-	emb.add_field( name= "{}yuri".format( PREFIX ), value= "Лезбиянки", inline= True)
-	emb.add_field( name= "{}loli".format( PREFIX ), value= "Лоликон", inline= True)
-	emb.add_field( name= "{}blowjob".format( PREFIX ), value= "Работает ротиком", inline= True)
-	emb.add_field( name= "{}kuni".format( PREFIX ), value= "Лизать киску", inline= True)
-	emb.add_field( name= "{}kemo".format( PREFIX ), value= "Няшки", inline= True)
-	emb.add_field( name= "{}solo".format( PREFIX ), value= "Соло", inline= True)
-	emb.add_field( name= "{}pussy".format( PREFIX ), value= "Киски", inline= True)
-	emb.add_field( name= "{}feet".format( PREFIX ), value= "Красивые ношки", inline= True)
-	emb.add_field( name= "{}hentai".format( PREFIX ), value= "Хентай", inline= True)
-	emb.add_field( name= "{}anal".format( PREFIX ), value= "анал", inline= True)
-	emb.add_field( name= "{}cum".format( PREFIX ), value= "Кончают", inline= True)
-	emb.set_image( url = "https://danbooru.donmai.us/data/e71dc6de8c5c153e56ee179e5dc5d58f.gif")
-	await ctx.send(embed = emb)
+    emb = discord.Embed( title= "Команды NSFW", color = 0x1100ff )
+    emb.add_field( name= "{}neko".format( PREFIX ), value= "Кошки-девочки", inline= True)
+    emb.add_field( name= "{}yuri".format( PREFIX ), value= "Лезбиянки", inline= True)
+    emb.add_field( name= "{}loli".format( PREFIX ), value= "Лоликон", inline= True)
+    emb.add_field( name= "{}blowjob".format( PREFIX ), value= "Работает ротиком", inline= True)
+    emb.add_field( name= "{}kuni".format( PREFIX ), value= "Лизать киску", inline= True)
+    emb.add_field( name= "{}kemo".format( PREFIX ), value= "Няшки", inline= True)
+    emb.add_field( name= "{}solo".format( PREFIX ), value= "Соло", inline= True)
+    emb.add_field( name= "{}pussy".format( PREFIX ), value= "Киски", inline= True)
+    emb.add_field( name= "{}feet".format( PREFIX ), value= "Красивые ношки", inline= True)
+    emb.add_field( name= "{}hentai".format( PREFIX ), value= "Хентай", inline= True)
+    emb.add_field( name= "{}anal".format( PREFIX ), value= "анал", inline= True)
+    emb.add_field( name= "{}cum".format( PREFIX ), value= "Кончают", inline= True)
+    emb.set_image( url = "https://danbooru.donmai.us/data/e71dc6de8c5c153e56ee179e5dc5d58f.gif")
+    await ctx.send(embed = emb)
 
 #Music
-@client.command(pass_context=True, aliases=['j', 'joi'])
+@bot.command(pass_context=True, aliases=['j', 'joi'])
 async def join(ctx):
     channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild=ctx.guild)
+    voice = get(bot.voice_bots, guild=ctx.guild)
 
     if voice and voice.is_connected():
         await voice.move_to(channel)
@@ -241,10 +252,10 @@ async def join(ctx):
         print(f"Bot подключился к голосовому каналу {channel}\n")
         await ctx.send(f"Присоединился {channel}")
 
-@client.command(pass_context=True, aliases=['l', 'lea'])
+@bot.command(pass_context=True, aliases=['l', 'lea'])
 async def leave(ctx):
     channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild=ctx.guild)
+    voice = get(bot.voice_bots, guild=ctx.guild)
 
     if voice and voice.is_connected():
         await voice.disconnect()
@@ -254,7 +265,7 @@ async def leave(ctx):
         print("Bot покинул голосовой канал, ему так ")
         await ctx.send("Покинул голосовой канал")
 
-@client.command(pass_context=True, aliases=['p', 'pla'])
+@bot.command(pass_context=True, aliases=['p', 'pla'])
 async def play(ctx, url: str):
 
     song_there = os.path.isfile("song.mp3")
@@ -269,7 +280,7 @@ async def play(ctx, url: str):
 
     await ctx.send("Getting everything ready now")
 
-    voice = get(bot.voice_clients, guild=ctx.guild)
+    voice = get(bot.voice_bots, guild=ctx.guild)
 
     ydl_opts = {
         'format': 'bestaudio/best',
@@ -299,21 +310,21 @@ async def play(ctx, url: str):
     print("playing\n")
 
 #EmojiRole
-@client.event
+@bot.event
 async def EmojiRole(ctx):
-	emb = discord.Embed( title= "Ваш пол", color=0x1100ff)
-	emb.add_field( name = payload.emoji.name, value= "Мужской", inline= True )
-	emb.add_field( name = payload.emoji.name, value= "Женский", inline= True )
-	await ctx.send(embed = emb)
+    emb = discord.Embed( title= "Ваш пол", color=0x1100ff)
+    emb.add_field( name = payload.emoji.name, value= "Мужской", inline= True )
+    emb.add_field( name = payload.emoji.name, value= "Женский", inline= True )
+    await ctx.send(embed = emb)
 
 #Private rooms v2
 class voice(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
 
 @commands.Cog.listener()
 async def on_voice_state_update(self, member, before, after):
-    conn = sqlite.connect("voice.db")
+    conn = sqlite3.connect("voice.db")
     c = conn.cursor()
     guildID = member.guild.id
     c.execute("SELECT voiceChannelID FROM guild WHERE guildID = ?", (guildID,))
@@ -338,7 +349,7 @@ async def on_voice_state_update(self, member, before, after):
                 c.execute("SELECT channelLimit FROM guildSettings WHERE guildID = ?", (guildID,))
                 guildSetting=c.fetchone()
                 if setting is None:
-                    name = f"Канал {member.name}"
+                    name = f"{member.name}'s channel"
                     if guildSetting is None:
                         limit = 0
                     else:
@@ -355,17 +366,17 @@ async def on_voice_state_update(self, member, before, after):
                         limit = setting[1]
                 categoryID = voice[0]
                 id = member.id
-                category = self.client.get.channel(categoryID)
+                category = self.bot.get.channel(categoryID)
                 channel2 = await member.guild.create_voice_channel(name,category=category)
                 channelID = channel2.id
                 await member.move_to(channel2)
-                await channel2.set_permissions(self.client.user, connect = True, mute_members = True, move_members = True, manage_channels = True)
+                await channel2.set_permissions(self.bot.user, connect = True, mute_members = True, move_members = True, manage_channels = True)
                 await channel2.edit(name= name, user_limit = limit)
                 cc.execute("INSERT INTO voiceChannel VALUES (?, ?)", (id,channelID))
                 conn.commit()
                 def check(a,b,c):
                     return len(channel2.member) == 0
-                await self.client.wait_for("voice_state_update", check=check)
+                await self.bot.wait_for("voice_state_update", check=check)
                 await channel2.delete()
                 await asyncio.sleep(3)
                 c.execute('DELETE FROM voiceChannel WHERE userID=?', (id,))
@@ -377,7 +388,7 @@ async def on_voice_state_update(self, member, before, after):
 
 @commands.group()
 async def voice(self, ctx):
-    pass
+        pass
 
 #Code
 @voice.command()
@@ -390,14 +401,14 @@ async def setup(self, ctx):
         def check(m):
             return m.author.id == ctx.author.id
         try:
-            category = await self.client.wait_for("message", check=check, timeout = 60.0)
+            category = await self.bot.await_for("message", check=check, timeout = 60.0)
         except asyncio.TimeoutError:
             await ctx.channel.send("Слишком долго не отвечал!")
         else:
             new_cat = await ctx.guild.create_category_channel(category.content)
             await ctx.channel.send("**Напишите название канала!**")
             try:
-                channel = await self.client.wait_for("message", check=check, timeout= 60.0)
+                channel = await self.bot.wait_for("message", check=check, timeout= 60.0)
             except asyncio.TimeoutError:
                 await ctx.channel.send("Слишком долго не отвечал!")
             else:
@@ -464,7 +475,7 @@ async def permit(self, ctx, member : discord.Member):
         await ctx.channel.send(f"{ctx.author.mention} Вы не владелец голосового чата.")
     else:
         channelID = voice[0]
-        channel = self.client.get_channel(channelID)
+        channel = self.bot.get_channel(channelID)
         await channel.set_permissions(member, connect=True)
         await ctx.channel.send(f"{ctx.author.mention} Вы разрешили {member.name} иметь доступ к каналу. ✅")
     conn.commit()
@@ -505,7 +516,7 @@ async def limit(self, ctx, limit):
         await ctx.channel.send(f"{ctx.author.mention} Вы не владелец голосового чата")
     else:
         channelID = voice[0]
-        channel = self.client.get_channel(channelID)
+        channel = self.bot.get_channel(channelID)
         await channel.edit(user_limit = limit)
         await ctx.channel.send(f"{ctx.author.mention} Вы установили ограничение канала равным "+ "{}!".format(limit))
         c.execute("SELECT channelName FROM userSettings WHERE userID = ?", (id,))
@@ -544,43 +555,32 @@ async def claim(self, ctx):
         conn.close()
 
 #Autorole join
-@client.event
+@bot.event
 async def on_member_join( member):
-    with open("lvl.json", "r") as f:
-        users = json.load(f)
+    role = discord.utils.get(member.server.roles, name= "Участники")
+    await bot.add_roles(member, role)
 
-    await update_data(users,member)
-
-    with open("E:\\Play Alexsey\\Программирование\\Microsoft Visual Studio\\2019\\Professional\\Ember\\lvl.json", "w") as f:
-        json.dump(users, f)
-
-        channel = client.get_channel( 788051331927507025 )
-
-    role = discord.utils.get( member.guild.roles, id = 789036534988275712 )
-
-    await member.add_roles( role )
-
-@client.event
+@bot.event
 async def on_command_error( ctx, error ):
     pass
 
 #InfoMember
-@client.command( pass_context = True )
+@bot.command( pass_context = True )
 async def info( ctx, member:discord.Member):
-	emb= discord.Embed(title = "Информация о пользователе", color=0x1100ff)
-	emb.add_field( name = "Когда присоединился:", value = member.joined_at, inline=False)
-	emb.add_field( name = "Имя:", value = member.display_name, inline=False)
-	emb.add_field( name = "Айди:", value= member.id, inline=False)
-	emb.add_field( name = "Аккаунт был создан:", value= member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=False)
-	emb.set_thumbnail( url = member.avatar_url)
-	emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
-	emb.set_author( name = ctx.message.author, url= ctx.message.author.avatar_url)
-	await ctx.send(embed = emb)
+    emb= discord.Embed(title = "Информация о пользователе", color=0x1100ff)
+    emb.add_field( name = "Когда присоединился:", value = member.joined_at, inline=False)
+    emb.add_field( name = "Имя:", value = member.display_name, inline=False)
+    emb.add_field( name = "Айди:", value= member.id, inline=False)
+    emb.add_field( name = "Аккаунт был создан:", value= member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=False)
+    emb.set_thumbnail( url = member.avatar_url)
+    emb.set_footer( text = f"Вызвано:{ctx.message.author}", icon_url= ctx.message.author.avatar_url)
+    emb.set_author( name = ctx.message.author, url= ctx.message.author.avatar_url)
+    await ctx.send(embed = emb)
 
 #Filter
-@client.event
+@bot.event
 async def on_message( message ):
-    await client.process_commands( message )
+    await bot.process_commands( message )
 
     msg = message.content.lower()
 
@@ -589,7 +589,7 @@ async def on_message( message ):
         await message.author.send( f"{ message.author.mention }, Братик Бяка не матюкайся(")
 
 #Clear channel
-@client.command( pass_context = True )
+@bot.command( pass_context = True )
 @commands.has_permissions( administrator = True )
 
 async def clear( ctx, amount : int ):
@@ -598,64 +598,64 @@ async def clear( ctx, amount : int ):
     message = {}
 
 #Mute
-@client.command( pass_context = True )
+@bot.command( pass_context = True )
 @commands.has_permissions( view_audit_log = True )
 async def mute(ctx, member:discord.Member ,time:int, reason = None):
-	channel = client.get_channel(789716555449368606)
-	muterole = discord.utils.get(ctx.guild.roles,id=789710455693246476)
-	emb = discord.Embed( title= "Mute", color=0x1100ff )
-	emb.add_field( name = "Администратор", value = ctx.message.author.mention, inline=False )
-	emb.add_field( name = "Нарушитель", value = member.mention, inline=False )
-	emb.add_field( name = "Причина", value = reason, inline=False )
-	emb.add_field( name = "Время", value = time, inline=False)
-	emb.set_thumbnail(url = member.avatar_url)
-	await member.add_roles(muterole)
-	await channel.send(embed = emb)
-	await asyncio.sleep(time)
-	await member.remove_roles(muterole)
+    channel = bot.get_channel(789716555449368606)
+    muterole = discord.utils.get(ctx.guild.roles,id=789710455693246476)
+    emb = discord.Embed( title= "Mute", color=0x1100ff )
+    emb.add_field( name = "Администратор", value = ctx.message.author.mention, inline=False )
+    emb.add_field( name = "Нарушитель", value = member.mention, inline=False )
+    emb.add_field( name = "Причина", value = reason, inline=False )
+    emb.add_field( name = "Время", value = time, inline=False)
+    emb.set_thumbnail(url = member.avatar_url)
+    await member.add_roles(muterole)
+    await channel.send(embed = emb)
+    await asyncio.sleep(time)
+    await member.remove_roles(muterole)
 
 #Unmute
-@client.command( pass_context = True )
+@bot.command( pass_context = True )
 @commands.has_permissions( view_audit_log = True )
 async def unmute(ctx, member:discord.Member):
-	channel = client.get_channel(789716555449368606)
-	muterole = discord.utils.get(ctx.guild.roles,id=789710455693246476)
-	emb = discord.Embed( title= "Unmute", color=0x1100ff )
-	emb.add_field( name = "Администратор", value = ctx.message.author.mention, inline=False )
-	emb.add_field( name = "Нарушитель", value = member.mention, inline=False )
-	emb.set_thumbnail(url = member.avatar_url)
-	await channel.send(embed = emb)
-	await member.remove_roles(muterole)
+    channel = bot.get_channel(789716555449368606)
+    muterole = discord.utils.get(ctx.guild.roles,id=789710455693246476)
+    emb = discord.Embed( title= "Unmute", color=0x1100ff )
+    emb.add_field( name = "Администратор", value = ctx.message.author.mention, inline=False )
+    emb.add_field( name = "Нарушитель", value = member.mention, inline=False )
+    emb.set_thumbnail(url = member.avatar_url)
+    await channel.send(embed = emb)
+    await member.remove_roles(muterole)
 
 #Kick
-@client.command( pass_context = True )
+@bot.command( pass_context = True )
 @commands.has_permissions( view_audit_log = True )
 async def kick( ctx, member: discord.Member, *, reason = None ):
-	channel = client.get_channel(789716555449368606)
-	emb = discord.Embed( title= "Kick", color=0x1100ff )
-	emb.add_field( name ="Администратор", value= ctx.message.author.mention, inline= False )
-	emb.add_field( name = "Нарушитель", value = member.mention, inline= False)
-	emb.add_field( name = "Причина", value= reason, inline=False)
-	emb.set_thumbnail( url = member.avatar_url)
-	await member.kick()
-	await channel.send(embed = emb)
+    channel = bot.get_channel(789716555449368606)
+    emb = discord.Embed( title= "Kick", color=0x1100ff )
+    emb.add_field( name ="Администратор", value= ctx.message.author.mention, inline= False )
+    emb.add_field( name = "Нарушитель", value = member.mention, inline= False)
+    emb.add_field( name = "Причина", value= reason, inline=False)
+    emb.set_thumbnail( url = member.avatar_url)
+    await member.kick()
+    await channel.send(embed = emb)
 
 #Ban
-@client.command( pass_context = True )
+@bot.command( pass_context = True )
 @commands.has_permissions( view_audit_log = True )
 async def ban( ctx, member: discord.Member,time:int, reason = None ):
-	channel = client.get_channel(789716555449368606)
-	emb = discord.Embed( title= "Ban", color=0x1100ff )
-	emb.add_field( name = "Администратор", value = ctx.message.author.mention, inline= False )
-	emb.add_field( name = "Нарушитель", value = member.mention, inline= False)
-	emb.add_field( name = "Причина", value = reason, inline= False)
-	emb.add_field( name = "Время", value= time, inline= False)
-	emb.set_thumbnail( url = member.avatar_url)
-	await member.ban()
-	await channel.send(embed = emb)
+    channel = bot.get_channel(789716555449368606)
+    emb = discord.Embed( title= "Ban", color=0x1100ff )
+    emb.add_field( name = "Администратор", value = ctx.message.author.mention, inline= False )
+    emb.add_field( name = "Нарушитель", value = member.mention, inline= False)
+    emb.add_field( name = "Причина", value = reason, inline= False)
+    emb.add_field( name = "Время", value= time, inline= False)
+    emb.set_thumbnail( url = member.avatar_url)
+    await member.ban()
+    await channel.send(embed = emb)
 
 #Help bot
-@client.command( pass_context = True )
+@bot.command( pass_context = True )
 async def helpbot( ctx ):
     emb = discord.Embed( title = "Команды к ботам", color=0x1100ff )
 
@@ -663,7 +663,7 @@ async def helpbot( ctx ):
     await ctx.send( embed=emb )
 
 #Rythm
-@client.command( pass_context = True )
+@bot.command( pass_context = True )
 async def Rythm( ctx ):
     emb=discord.Embed( title = "Список команды Rythm", color=0x1100ff )
     
@@ -680,6 +680,8 @@ async def clear_error( ctx, error ):
         await message.author.send( f"{ message.author.mention }, у вас не достаточно прав!" )
 
 # Get token
+def setup(bot):
+    bot.add_cog(voice(bot))
 #token = open( "token.txt", "r").readline()
 
 client.run(os.getenv('BOT_TOKEN'))
