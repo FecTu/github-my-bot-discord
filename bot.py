@@ -684,4 +684,4 @@ def setup(bot):
     bot.add_cog(voice(bot))
 #token = open( "token.txt", "r").readline()
 
-client.run(os.getenv('BOT_TOKEN'))
+bot.run(os.getenv('BOT_TOKEN'))
