@@ -1,5 +1,4 @@
 -iscord.py
-cachetools
 certifi
 cffi
 chardet
