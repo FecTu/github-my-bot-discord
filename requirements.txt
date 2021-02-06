@@ -1,5 +1,4 @@
 -iscord.py
-cryptography
 Cybernator
 decorator
 discord
