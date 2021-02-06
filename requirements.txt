@@ -1,5 +1,4 @@
 -iscord.py
-discord
 discord.py
 distlib
 dnspython
