@@ -1,5 +1,4 @@
 -iscord.py
-Cybernator
 decorator
 discord
 discord.py
