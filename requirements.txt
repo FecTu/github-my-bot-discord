@@ -1,5 +1,4 @@
 -iscord.py
-async-generator
 async-timeout
 asyncio
 attrs
