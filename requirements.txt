@@ -1,5 +1,4 @@
 -iscord.py
-certifi
 cffi
 chardet
 cryptography
