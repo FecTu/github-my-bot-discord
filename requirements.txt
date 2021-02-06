@@ -1,5 +1,4 @@
 -iscord.py
-asyncio
 attrs
 cachetools
 certifi
