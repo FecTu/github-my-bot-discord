@@ -12,7 +12,6 @@ cryptography
 Cybernator
 decorator
 discord
-discord.py
 distlib
 dnspython
 embed
