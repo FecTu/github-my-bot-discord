@@ -1,5 +1,4 @@
 -iscord.py
-decorator
 discord
 discord.py
 distlib
