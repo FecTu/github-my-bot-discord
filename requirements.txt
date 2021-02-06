@@ -1,5 +1,4 @@
 -iscord.py
-attrs
 cachetools
 certifi
 cffi
