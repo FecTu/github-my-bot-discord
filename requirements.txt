@@ -1,5 +1,4 @@
 -iscord.py
-appdirs
 async-generator
 async-timeout
 asyncio
