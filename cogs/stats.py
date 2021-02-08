@@ -19,8 +19,6 @@ class stats(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_member_join(self, ctx, member):
-		total_users = len(ctx.guild.members)
-		online = len([m for m in ctx.guild.members if m.status != discord.Status.offline])
 		pass
 
 
@@ -31,12 +29,17 @@ class stats(commands.Cog):
 	@stats.command()
 	@commands.has_permissions(administrator=True)
 	async def setup(self, ctx, *, member : discord.Member=None):
-		stat = await ctx.guild.create_category_channel(name= '📊Статистика сервера📊',position=reference.position+1)
-		total_users = len(ctx.guild.members)
+		stat = await ctx.guild.create_category_channel(name= '📊Статистика сервера📊',)
+		total_users = str(ctx.guild.member_count)
+		region = str(ctx.guild.region)
+		owner = str(ctx.guild.owner)
 		online = len([m for m in ctx.guild.members if m.status != discord.Status.offline])
-		channel = await ctx.guild.create_voice_channel(name=f'All Members: {ctx.guild.members}', category = stat)
-		channel2 = await ctx.guild.create_voice_channel(name=f'Online: {online}', category = stat)
-		channel3 = await ctx.guild.create_voice_channel(name=f'Region: {ctx.guild.region}', category = stat)
+		channel1 = await ctx.guild.create_voice_channel(name=f'All Members: {total_users}', category = stat)
+		await channel1.set_permissions(ctx.guild.default_role, connect = False)
+		#channel2 = await ctx.guild.create_voice_channel(name=f'Online: {online}', category = stat)
+		#await channel2.set_permissions(ctx.guild.default_role, connect = False)
+		channel3 = await ctx.guild.create_voice_channel(name=f'Region: {region}', category = stat)
+		await channel3.set_permissions(ctx.guild.default_role, connect = False)
 		def check(a,b,c):
 			return len(total_users,online)
 		print(f'Успешно загружена статистика сервера')
