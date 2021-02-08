@@ -29,7 +29,7 @@ class stats(commands.Cog):
 	@stats.command()
 	@commands.has_permissions(administrator=True)
 	async def setup(self, ctx, *, member : discord.Member=None):
-		stat = await ctx.guild.create_category_channel(name= '📊Статистика сервера📊',)
+		stat = await ctx.guild.create_category_channel(name= '📊Статистика сервера📊', position=1)
 		total_users = str(ctx.guild.member_count)
 		region = str(ctx.guild.region)
 		owner = str(ctx.guild.owner)
