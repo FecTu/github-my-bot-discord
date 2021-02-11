@@ -313,7 +313,75 @@ async def EmojiRole(ctx):
     emb.add_field( name = payload.emoji.name, value= "Женский", inline= True )
     await ctx.send(embed = emb)
 
-#Statistic
+#Reaction Role
+@bot.event
+async def on_raw_reaction_add(payload):
+
+    if payload.member.bot:
+        pass
+
+    else:
+
+        with open('reactionrole1.json') as react_file:
+
+            data = json.load(react_file)
+            for x in data:
+                if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
+                    role = discord.utils.get(bot.get_guild(payload.guild_id).roles, id=x['role_id'])
+
+                    await payload.member.add_roles(role)
+
+@bot.event
+async def on_raw_reaction_remove(payload):
+
+    if payload.member.bot:
+        pass
+
+    else:
+
+        with open('reactionrole1.json') as react_file:
+
+            data = json.load(react_file)
+            for x in data:
+                if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
+                    role = discord.utils.get(bot.get_guild(payload.guild_id).roles, id=x['role_id'])
+
+                    await bot.get_guild(payload.guild_id).get_member(payload.user_id).remove_roles(role)
+
+@bot.command()
+@commands.has_permissions( administrator = True )
+async def reactrole(ctx, emoji, role: discord.Role,*,message):
+
+    gen = discord.Embed(description=message)
+    msg = await ctx.send(embed = gen)
+    await msg.add_reaction(emoji)
+
+    with open('reactionrole1.json') as json_file:
+        data = json.load(json_file)
+
+        new_react_role = {
+            'role_name':role.name,
+            'role_id':role.id,
+            'emoji':emoji,
+            'message_id':msg.id
+        }
+
+        data.append(new_react_role)
+
+
+    with open('reactionrole1.json', 'w') as j:
+        json.dump(data,j,indent=4)
+
+@bot.command()
+async def virus(ctx, virus=None, *, user: discord.Member = None):
+    virus = virus or 'discord'
+    user = user or ctx.author
+    with open('data/virus.txt') as f:
+        animation = f.read().splitlines()
+    base = await ctx.send(animation[0])
+    for line in animation[1:]:
+        await base.edit(content=line.format(virus=virus, user=user))
+        await asyncio.sleep(random.randint(1, 4))
 
 #Private rooms v2
 #@bot.group()
