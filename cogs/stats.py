@@ -14,8 +14,8 @@ from time import sleep
 import requests
 
 class stats(commands.Cog):
-	def __init__(self, bot):
-		self.bot=bot
+	def __init__(self, client):
+		self.client=client
 
 	@commands.Cog.listener()
 	async def on_member_join(self, ctx, member):
@@ -38,7 +38,7 @@ class stats(commands.Cog):
 		total_users = str(ctx.guild.member_count)
 		region = str(ctx.guild.region)
 		owner = str(ctx.guild.owner)
-		bots = len(self.servers)
+		clients = len(self.servers)
 		online = len([m for m in ctx.guild.members if m.status != discord.Status.offline])
 		channel1 = await ctx.guild.create_voice_channel(name=f'All Members: {total_users}', category = stat)
 		await channel1.set_permissions(ctx.guild.default_role, connect = False)
@@ -50,5 +50,5 @@ class stats(commands.Cog):
 			return len(total_users,online)
 		print(f'Успешно загружена статистика сервера')
 
-def setup(bot):
-	bot.add_cog(stats(bot))
+def setup(client):
+	client.add_cog(stats(client))

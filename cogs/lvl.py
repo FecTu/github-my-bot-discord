@@ -9,8 +9,8 @@ import io
 import json
 
 class level(commands.Cog):
-	def __init__(self, bot):
-		self.bot=bot
+	def __init__(self, client):
+		self.client=client
 
 	@commands.Cog.listener()
 	async def on_message(self, message):
@@ -28,7 +28,7 @@ class level(commands.Cog):
 			lvl = users[user]['lvl']
 			lvl_end = int(exp ** (1/4))
 			if exp > lvl:
-				await message.channel.send(f'{message.author.mention} повысил свой уровень до {lvl_end}')
+				await message.channel.send(f'{message.author.mention} повысил свой уровень')
 				users[user]['exp'] = 0
 				users[user]['lvl'] = lvl + 1
 		await update_data(users,str(message.author.id))
@@ -69,5 +69,5 @@ class level(commands.Cog):
 
 		await ctx.send(file = discord.File(fp = 'rank_card.png'))
 
-def setup(bot):
-	bot.add_cog(level(bot))
+def setup(client):
+	client.add_cog(level(client))
