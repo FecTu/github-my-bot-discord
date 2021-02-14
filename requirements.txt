@@ -33,6 +33,7 @@ multidict
 nekos.py
 nhentai
 outcome
+Pillow
 pip
 protobuf
 pyasn1
