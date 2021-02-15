@@ -513,4 +513,4 @@ def setup(client):
 
 #token = open( "token.txt", "r").readline()
 
-bot.run(os.getenv('BOT_TOKEN'))
+client.run(os.getenv('BOT_TOKEN'))
